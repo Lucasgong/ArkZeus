@@ -1,0 +1,11 @@
+1:
+  account: 158********
+  kind: guan
+  password: *******
+  holiday: False
+  skip: False
+  plan:
+  - name: 1-7
+    num: 20
+  use_potion: True
+  use_stone: False

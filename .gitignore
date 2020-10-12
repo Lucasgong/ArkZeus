@@ -1,0 +1,5 @@
+config/account_info.yaml
+.vscode
+*__py*
+data/*
+*DS_Store*
