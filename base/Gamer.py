@@ -2,7 +2,7 @@
 Description: define basic operator
 Author: zgong
 Date: 2020-05-17 13:16:40
-LastEditTime: 2020-10-04 09:09:49
+LastEditTime: 2020-10-15 23:33:22
 LastEditors: zgong
 FilePath: /ArkZeus/base/Gamer.py
 Reference: 
@@ -88,14 +88,14 @@ class PhoneGamer(Gamer):
         time.sleep(duration)
 
     def __swipe_half_page(self):
-        self.swipe(1000, 500, 875, 500, duration=1)
+        self.swipe(1000, 300/self.y_ratio, 875, 300/self.y_ratio, duration=1)
 
     def swipe_page(self, num):
         for _ in range(int(num / 0.5)):
             self.__swipe_half_page()
 
-    def go_to_right(self):
-        for _ in range(5):
+    def go_to_right(self,n=5):
+        for _ in range(n):
             self.swipe(0, 200, 900, 200, 100)
         time.sleep(3)
 

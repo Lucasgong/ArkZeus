@@ -73,6 +73,11 @@ class StageSelector(PhoneGamer):
             self.click(650, 200, 3)
             self.click(680, 600, 3)
             self.click(800, 355, 3)
+        if activity == 'MN':
+            self.click(*up_down[loc])
+            self.click(2000/self.x_ratio,830/self.y_ratio,3)
+            self.go_to_right()
+            self.swipe_page(1.5)
 
     def route_main(self, name, day):
         self.click(650, 200, 3)
