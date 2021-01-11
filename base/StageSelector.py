@@ -19,19 +19,19 @@ class StageSelector(PhoneGamer):
         pic_path = f'utils/config/pic/stage_pic/{self.name}.png'
         if self.stagetype == 'ACTIVITY':
             self.route_activity(self.name, self.day)
-            self.click_image(pic_path)
+            self.click_image(pic_path, check=False)
 
         elif self.stagetype == 'MAIN':
             self.route_main(self.name, self.day)
-            self.click_image(pic_path)
+            self.click_image(pic_path, check=False)
 
         elif self.stagetype == 'DAILY':
             self.route_daily(self.name, self.day)
-            self.click_image(pic_path)
+            #self.click_image(pic_path, check=False)
 
         elif self.stagetype == 'SUB':
             self.route_sub(self.name, self.day)
-            self.click_image(pic_path)
+            self.click_image(pic_path, check=False)
 
         elif self.stagetype == 'ANNI':
             self.route_annihilation(self.name, self.day)
@@ -41,7 +41,7 @@ class StageSelector(PhoneGamer):
     def run(self):
         self.route()
 
-    def route_activity(self, name, day, loc=1):
+    def route_activity(self, name, day, loc=0):
         # 根据活动位置修改
         up_down = [(950, 150, 3), (950, 200, 3)]
         activity = name[:2]
@@ -75,13 +75,24 @@ class StageSelector(PhoneGamer):
             self.click(800, 355, 3)
         if activity == 'MN':
             self.click(*up_down[loc])
-            self.click(2000/self.x_ratio,830/self.y_ratio,3)
-            self.go_to_right()
+            self.click(2000 / self.x_ratio, 830 / self.y_ratio, 3)
+            self.go_to_right(2)
             self.swipe_page(1.5)
 
+        if activity == 'MB':
+            self.click(*up_down[loc])
+            self.click(2240 / self.x_ratio, 350 / self.y_ratio, 3)
+
+        if activity == 'BH':
+            self.click(*up_down[loc])
+            self.click(880, 500, 3)
+    
     def route_main(self, name, day):
         self.click(650, 200, 3)
-        self.go_to_chapter(name[0])
+        for i in name:
+            if i.isdigit():
+                self.go_to_chapter(i)
+                break
 
         with open('utils/config/stage_loc_table.csv', 'r') as handler:
             for line in handler:
@@ -116,8 +127,13 @@ class StageSelector(PhoneGamer):
             self.click(800, 300, 3)
         elif name == 'waihuan':
             self.click(600, 400, 3)
+        elif name == 'qishi':
+            self.click(500,250,3)
+            self.click(500,250,3)
+
 
     def route_daily(self, name, day):
+        self.click(650, 200, 3)
         if self.is_supplies(name):
             index = self.return_index(name, day)
             self.go_to_supplies(index)
@@ -128,7 +144,7 @@ class StageSelector(PhoneGamer):
             ## 待补充
         elif self.is_chip(name):
             self.click(300, 600)
-            self.click_image(f'config/pic/stage_pic/{name[:4]}')
+            self.click_image(f'utils/config/pic/stage_pic/{name[:4]}.png')
             if name[-1] == '1':
                 self.click(320, 380)
             elif name[-1] == '2':

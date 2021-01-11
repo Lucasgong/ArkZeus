@@ -1,3 +1,12 @@
+'''
+Description: 
+Author: zgong
+Date: 2020-05-17 14:24:50
+LastEditTime: 2020-11-10 18:22:23
+LastEditors: zgong
+FilePath: /ArkZeus/utils/info/StageInfo.py
+Reference: 
+'''
 import requests
 import pandas as pd
 
@@ -16,7 +25,7 @@ class StageInfo():
     
     def check_name(self):
         name = self.name
-        if name in ['shiqu','waihuan']:
+        if name in ['shiqu','waihuan','qishi']:
             self.stageType = 'ANNI'
             self.stageId = None
             self.code = name

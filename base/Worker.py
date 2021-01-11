@@ -2,7 +2,7 @@
 Description: define useful worker
 Author: zgong
 Date: 2020-10-01 16:07:47
-LastEditTime: 2020-10-01 19:35:37
+LastEditTime: 2020-11-05 20:10:08
 LastEditors: zgong
 FilePath: /ArkZeus/base/Worker.py
 Reference: 
@@ -32,15 +32,18 @@ class Start(PhoneGamer):
 
     def quit(self):
         if self.kind == 'guan':
-            os.system('adb shell am force-stop com.hypergryph.arknights')
+            os.system(
+                '/usr/local/bin/adb shell am force-stop com.hypergryph.arknights'
+            )
         else:
             os.system(
-                'adb shell am force-stop com.hypergryph.arknights.bilibili')
+                '/usr/local/bin/adb shell am force-stop com.hypergryph.arknights.bilibili'
+            )
 
     def load(self, kind):
         if kind == 'bl':
             os.system(
-                'adb shell am start -n com.hypergryph.arknights.bilibili/com.u8.sdk.SplashActivity'
+                '/usr/local/bin/adb shell am start -n com.hypergryph.arknights.bilibili/com.u8.sdk.SplashActivity'
             )
             time.sleep(30)
             self.click(100, 100, 10)
@@ -48,7 +51,7 @@ class Start(PhoneGamer):
 
         if kind == 'guan':
             os.system(
-                'adb shell am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext'
+                '/usr/local/bin/adb shell am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext'
             )
             time.sleep(30)
             self.click(100, 100, 10)
@@ -64,12 +67,12 @@ class Start(PhoneGamer):
 
     def login(self, account, password):
         self.click(500, 380, 2)
-        os.system(f'adb shell input text {account}')
+        os.system(f'/usr/local/bin/adb shell input text {account}')
         time.sleep(2)
         self.click(960, 100, 2)
 
         self.click(500, 430, 2)
-        os.system(f'adb shell input text {password}')
+        os.system(f'/usr/local/bin/adb shell input text {password}')
         time.sleep(2)
         self.click(960, 100, 2)
 
@@ -118,13 +121,13 @@ class Material(PhoneGamer):
     def battle(self, duration, name, use_potion=False, use_stone=False):
         self.click(900, 600, 5)
         if use_potion:
-            if (not use_stone):
-                if self.check('utils/config/pic/base/stone.png')['conf'] > 0.9:
-                    self.click(900, 400, 3)
-                else:
-                    self.click(870, 500, 3)
-            else:
-                self.click(870, 500, 3)
+            # if (not use_stone):
+            #     if self.check('utils/config/pic/base/stone.png')['conf'] > 0.9:
+            #         self.click(900, 400, 3)
+            #     else:
+            #         self.click(870, 500, 3)
+            # else:
+            self.click(870, 500, 3)
         else:
             self.click(900, 400, 3)
 

@@ -2,9 +2,9 @@
 Description: 
 Author: zgong
 Date: 2020-09-25 01:33:50
-LastEditTime: 2020-10-01 17:44:42
+LastEditTime: 2020-10-15 23:44:00
 LastEditors: zgong
-FilePath: /ArkZeus_phone/hand.py
+FilePath: /ArkZeus/hand.py
 Reference: 
 '''
 import sys
@@ -23,6 +23,7 @@ def hand():
         if tasker.valid:
             for planer in tasker.planers:
                 m = Material(planer)
+                m.back_to_main()
                 m.run()
     o.quit()
 
