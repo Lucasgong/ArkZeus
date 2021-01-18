@@ -2,7 +2,7 @@
 Description: define basic operator
 Author: zgong
 Date: 2020-05-17 13:16:40
-LastEditTime: 2021-01-18 21:57:31
+LastEditTime: 2021-01-18 22:53:12
 LastEditors: zgong
 FilePath: /ArkZeus/base/Gamer.py
 Reference: 
@@ -109,10 +109,14 @@ class PhoneGamer(Gamer):
         time.sleep(3)
 
     def screenshot(self, num=0, name='screen'):
+        screen_file = Path(f'data/{name}.png')
+        if not screen_file.exists():
+            screen_file.parent.mkdir(parents=True,exist_ok=True)
         os.system(
             f'adb exec-out screencap -p > data/{name}.png')
         img = cv2.imread(f'data/{name}.png')
-        img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        if img.shape[0] > img.shape[1]:
+            img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
         img = cv2.resize(img, (1024, 640))
         cv2.imwrite(f'data/{name}.png', img)
 
