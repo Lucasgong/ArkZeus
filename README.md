@@ -1,6 +1,15 @@
+<!--
+ * @Author: zgong
+ * @Date: 2020-05-17 15:00:18
+ * @LastEditors: zgong
+ * @LastEditTime: 2021-01-18 21:47:12
+-->
 For game "Arknights" ,instead of watching video games over and over again, use this automated tool to manage your "reason".
 
 Enjoying your game and life :)
+
+## how to use
+1. install adb
 
 ## how to add new stage
 修改setting utils/config/setting.py

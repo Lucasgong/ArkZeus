@@ -2,7 +2,7 @@
 Description: define basic operator
 Author: zgong
 Date: 2020-05-17 13:16:40
-LastEditTime: 2020-11-05 18:38:01
+LastEditTime: 2021-01-18 21:57:31
 LastEditors: zgong
 FilePath: /ArkZeus/base/Gamer.py
 Reference: 
@@ -25,25 +25,25 @@ class Gamer():
         self.kind = kind
 
     def connect(self):
-        # 自动连接一个/usr/local/bin/adb 文件,之后返回连接的个数
+        # 自动连接一个adb 文件,之后返回连接的个数
         while True:
-            os.system('/usr/local/bin/adb kill-server')
+            os.system('adb kill-server')
             time.sleep(2)
-            os.system(f'/usr/local/bin/adb connect {self.device_name}')
-            # if platform.system() == 'Windows':
-            #     os.system('/usr/local/bin/adb connect 127.0.0.1:7555')
-            # else:
-            os.system('/usr/local/bin/adb devices')
-            f = os.popen('/usr/local/bin/adb devices')
+            os.system(f'adb connect {self.device_name}')
+            if platform.system() == 'Windows':
+                os.system('adb connect 127.0.0.1:7555')
+            else:
+                os.system('adb devices')
+            f = os.popen('adb devices')
             result = f.read()
             f.close()
             if (self.device_name in result) and not ("offline" in result):
                 print('connected !')
                 break
             else:
-                os.system('/usr/local/bin/adb kill-server')
-                os.system('/usr/local/bin/adb start-server')
-                os.system(f'/usr/local/bin/adb connect {self.device_name}')
+                os.system('adb kill-server')
+                os.system('adb start-server')
+                os.system(f'adb connect {self.device_name}')
             time.sleep(10)
 
     def imshow(self, img, name='imageWindow'):
@@ -64,13 +64,13 @@ class PhoneGamer(Gamer):
 
     def rotation_to_row(self):
         os.system(
-            '/usr/local/bin/adb shell settings put system user_rotation 1')
+            'adb shell settings put system user_rotation 1')
         os.system(
-            '/usr/local/bin/adb shell settings put system accelerometer_rotation 0'
+            'adb shell settings put system accelerometer_rotation 0'
         )
 
     def get_resolution(self):
-        f = os.popen('/usr/local/bin/adb shell wm size')
+        f = os.popen('adb shell wm size')
         result = f.read()
         Y, X = result.split(' ')[-1].strip().split('x')
         self.x_ratio = int(X) / 1024
@@ -78,18 +78,18 @@ class PhoneGamer(Gamer):
 
     def click(self, x, y, duration=3):
         x, y = self.x_ratio * x, self.y_ratio * y
-        os.system(f'/usr/local/bin/adb shell input tap {x} {y}')
+        os.system(f'adb shell input tap {x} {y}')
         time.sleep(duration)
 
     def swipe(self, x1, y1, x2, y2, use_time=False, duration=3):
         x1, y1, x2, y2 = self.x_ratio * x1, self.y_ratio * y1, self.x_ratio * x2, self.y_ratio * y2
         if use_time:
             os.system(
-                f'/usr/local/bin/adb shell input swipe {x1} {y1} {x2} {y2} {use_time}'
+                f'adb shell input swipe {x1} {y1} {x2} {y2} {use_time}'
             )
         else:
             os.system(
-                f'/usr/local/bin/adb shell input swipe {x1} {y1} {x2} {y2}')
+                f'adb shell input swipe {x1} {y1} {x2} {y2}')
         time.sleep(duration)
 
     def __swipe_half_page(self):
@@ -110,7 +110,7 @@ class PhoneGamer(Gamer):
 
     def screenshot(self, num=0, name='screen'):
         os.system(
-            f'/usr/local/bin/adb exec-out screencap -p > data/{name}.png')
+            f'adb exec-out screencap -p > data/{name}.png')
         img = cv2.imread(f'data/{name}.png')
         img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
         img = cv2.resize(img, (1024, 640))

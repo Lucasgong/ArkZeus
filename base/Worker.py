@@ -2,7 +2,7 @@
 Description: define useful worker
 Author: zgong
 Date: 2020-10-01 16:07:47
-LastEditTime: 2020-11-05 20:10:08
+LastEditTime: 2021-01-18 21:59:31
 LastEditors: zgong
 FilePath: /ArkZeus/base/Worker.py
 Reference: 
@@ -33,17 +33,17 @@ class Start(PhoneGamer):
     def quit(self):
         if self.kind == 'guan':
             os.system(
-                '/usr/local/bin/adb shell am force-stop com.hypergryph.arknights'
+                'adb shell am force-stop com.hypergryph.arknights'
             )
         else:
             os.system(
-                '/usr/local/bin/adb shell am force-stop com.hypergryph.arknights.bilibili'
+                'adb shell am force-stop com.hypergryph.arknights.bilibili'
             )
 
     def load(self, kind):
         if kind == 'bl':
             os.system(
-                '/usr/local/bin/adb shell am start -n com.hypergryph.arknights.bilibili/com.u8.sdk.SplashActivity'
+                'adb shell am start -n com.hypergryph.arknights.bilibili/com.u8.sdk.SplashActivity'
             )
             time.sleep(30)
             self.click(100, 100, 10)
@@ -51,7 +51,7 @@ class Start(PhoneGamer):
 
         if kind == 'guan':
             os.system(
-                '/usr/local/bin/adb shell am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext'
+                'adb shell am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext'
             )
             time.sleep(30)
             self.click(100, 100, 10)
@@ -67,12 +67,12 @@ class Start(PhoneGamer):
 
     def login(self, account, password):
         self.click(500, 380, 2)
-        os.system(f'/usr/local/bin/adb shell input text {account}')
+        os.system(f'adb shell input text {account}')
         time.sleep(2)
         self.click(960, 100, 2)
 
         self.click(500, 430, 2)
-        os.system(f'/usr/local/bin/adb shell input text {password}')
+        os.system(f'adb shell input text {password}')
         time.sleep(2)
         self.click(960, 100, 2)
 
