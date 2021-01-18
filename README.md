@@ -2,7 +2,7 @@
  * @Author: zgong
  * @Date: 2020-05-17 15:00:18
  * @LastEditors: zgong
- * @LastEditTime: 2021-01-18 21:47:12
+ * @LastEditTime: 2021-01-19 00:18:58
 -->
 For game "Arknights" ,instead of watching video games over and over again, use this automated tool to manage your "reason".
 
@@ -17,3 +17,7 @@ Enjoying your game and life :)
     1. 增加图片 utils/config/pic/stage_pic
     2. 到达关卡方式 utils/config/stage.py
     3. 关卡完成时间 utils/config/stage.py
+
+## 
+1. 关卡结束判断
+2. 滚动 robust 实现

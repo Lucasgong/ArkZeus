@@ -2,7 +2,7 @@
 Description: define basic operator
 Author: zgong
 Date: 2020-05-17 13:16:40
-LastEditTime: 2021-01-18 22:53:12
+LastEditTime: 2021-01-18 23:58:35
 LastEditors: zgong
 FilePath: /ArkZeus/base/Gamer.py
 Reference: 
@@ -73,8 +73,11 @@ class PhoneGamer(Gamer):
         f = os.popen('adb shell wm size')
         result = f.read()
         Y, X = result.split(' ')[-1].strip().split('x')
-        self.x_ratio = int(X) / 1024
-        self.y_ratio = int(Y) / 640
+        Y = int(Y)
+        X = int(X)
+        X, Y = max(X,Y),min(X,Y)
+        self.x_ratio = X / 1024
+        self.y_ratio = Y / 640
 
     def click(self, x, y, duration=3):
         x, y = self.x_ratio * x, self.y_ratio * y
@@ -93,6 +96,7 @@ class PhoneGamer(Gamer):
         time.sleep(duration)
 
     def __swipe_half_page(self):
+
         self.swipe(1000,
                    300 / self.y_ratio,
                    875,
@@ -109,12 +113,12 @@ class PhoneGamer(Gamer):
         time.sleep(3)
 
     def screenshot(self, num=0, name='screen'):
-        screen_file = Path(f'data/{name}.png')
+        screen_file = Path(f'data/{name}_shot.png')
         if not screen_file.exists():
             screen_file.parent.mkdir(parents=True,exist_ok=True)
         os.system(
-            f'adb exec-out screencap -p > data/{name}.png')
-        img = cv2.imread(f'data/{name}.png')
+            f'adb exec-out screencap -p > data/{name}_shot.png')
+        img = cv2.imread(f'data/{name}_shot.png')
         if img.shape[0] > img.shape[1]:
             img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
         img = cv2.resize(img, (1024, 640))
