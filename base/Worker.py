@@ -58,7 +58,6 @@ class Start(PhoneGamer):
             time.sleep(30)
             # check_load
             v = self.check('utils/config/pic/base/load.png')['conf']
-            print(v)
             if v > 0.9:
                 self.click(737, 610, 2)
 
