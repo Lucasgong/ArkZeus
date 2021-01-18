@@ -2,7 +2,7 @@
  * @Author: zgong
  * @Date: 2020-05-17 15:00:18
  * @LastEditors: zgong
- * @LastEditTime: 2021-01-19 00:18:58
+ * @LastEditTime: 2021-01-19 00:20:45
 -->
 For game "Arknights" ,instead of watching video games over and over again, use this automated tool to manage your "reason".
 
@@ -20,4 +20,5 @@ Enjoying your game and life :)
 
 ## 
 1. 关卡结束判断
-2. 滚动 robust 实现
+2. 增加滚动到边缘判定
+3. 滚动翻页的 robust 实现
