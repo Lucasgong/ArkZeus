@@ -2,7 +2,7 @@
 Description: 
 Author: zgong
 Date: 2020-05-17 19:17:24
-LastEditTime: 2020-10-01 17:41:57
+LastEditTime: 2021-01-30 13:05:13
 LastEditors: zgong
 FilePath: /ArkZeus_phone/base/Tasker.py
 Reference: 
@@ -11,7 +11,8 @@ import sys
 import time
 from pathlib import Path
 
-from utils.config.setting import Calendar_Chip,Calendar_Supply
+from utils.config.setting import Calendar_Chip
+from utils.config.setting import Calendar_Supply
 
 
 class Planer():

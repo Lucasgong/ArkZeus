@@ -20,18 +20,21 @@ class StageInfo():
         self.valid = False
         self.name = name
         self.check_name()
-        if self.valid:
-            self.duration = self.get_run_time()
+        if not self.valid:
+            raise(f'{name} error')
+            #self.duration = self.get_run_time()
     
     def check_name(self):
         name = self.name
-        if name in ['shiqu','waihuan','qishi']:
+        if name.isalpha():
+            ## 剿灭作战
             self.stageType = 'ANNI'
             self.stageId = None
             self.code = name
             self.dropInfos = None
             self.valid = True
-            return 
+            return
+
         req_header = {
             'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
                 }

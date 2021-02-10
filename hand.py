@@ -14,10 +14,11 @@ from base.TaskServer import Server
 from base.Worker import Start, Material
 from base.Tasker import Tasker
 
+DEVICE="192.168.50.70:5555"
 
 def hand():
     server = Server()
-    o = Start('guan', None, is_open=True)
+    o = Start('guan', None, is_open=True,device_name=DEVICE)
     for task in server.send_tasks():
         tasker = Tasker(task)
         if tasker.valid:

@@ -2,7 +2,7 @@
 Description: define useful worker
 Author: zgong
 Date: 2020-10-01 16:07:47
-LastEditTime: 2021-01-18 21:59:31
+LastEditTime: 2021-01-30 13:06:52
 LastEditors: zgong
 FilePath: /ArkZeus/base/Worker.py
 Reference: 
@@ -15,15 +15,19 @@ from tqdm import tqdm
 
 from .Gamer import PhoneGamer
 from .StageSelector import StageSelector
-from utils.info.StageInfo import StageInfo
+from .StageInfo import StageInfo
 
 
 class Start(PhoneGamer):
-    def __init__(self, kind, loader, is_open=False):
-        self.device_name = "192.168.1.105:5555"
+    def __init__(self,
+                 kind,
+                 loader,
+                 is_open=False,
+                 device_name="192.168.1.105:5555"):
+        self.device_name = device_name
         self.connect()
         self.rotation_to_row()
-        super().__init__(kind)
+        super().__init__(kind,device_name)
         if not is_open:
             self.quit()
             self.load(kind)
@@ -32,13 +36,10 @@ class Start(PhoneGamer):
 
     def quit(self):
         if self.kind == 'guan':
-            os.system(
-                'adb shell am force-stop com.hypergryph.arknights'
-            )
+            os.system('adb shell am force-stop com.hypergryph.arknights')
         else:
             os.system(
-                'adb shell am force-stop com.hypergryph.arknights.bilibili'
-            )
+                'adb shell am force-stop com.hypergryph.arknights.bilibili')
 
     def load(self, kind):
         if kind == 'bl':
@@ -98,47 +99,68 @@ class Material(PhoneGamer):
     def __init__(self, planer):
         super().__init__('guan')
         self.planer = planer
-
         self.stageinfo = StageInfo(self.planer.name)
         self.stageselector = StageSelector(self.planer.name, self.planer.day,
                                            self.stageinfo.stageType)
+        self.planer.stagetype = self.stageinfo.stageType
 
     def run(self):
         print(f'go to {self.planer.name}:{self.planer.num}times')
         self.screenshot(name='state_old')
         self.stageselector.run()
-        duration = self.stageinfo.duration
+        #duration = self.stageinfo.duration
         print('ready?')
         time.sleep(5)
         print('go!')
         for _ in tqdm(range(self.planer.num)):
-            self.battle(duration, self.planer.name, self.planer.is_potion,
-                        self.planer.is_stone)
+            normal_exis = self.battle()
+            if not normal_exis:
+                break
             time.sleep(5)
         self.back_to_main()
         self.screenshot(name='state_now')
 
-    def battle(self, duration, name, use_potion=False, use_stone=False):
+    def battle(self):
+        name = self.planer.name
+        stagetype = self.planer.stagetype
+        use_potion = self.planer.is_potion
+        use_stone = self.planer.is_stone
+        
         self.click(900, 600, 5)
         if use_potion:
-            # if (not use_stone):
-            #     if self.check('utils/config/pic/base/stone.png')['conf'] > 0.9:
-            #         self.click(900, 400, 3)
-            #     else:
-            #         self.click(870, 500, 3)
-            # else:
             self.click(870, 500, 3)
         else:
             self.click(900, 400, 3)
 
         self.click(900, 600, 5)
         self.click(900, 400, 3)
-        self.click(570, 500, duration)
+        ## TODO:心跳机制判断是否结束
+        if stagetype == "ANNI":
+            normal_exis = self.check_game_over(1000,100)
+        else:
+            normal_exis = self.check_game_over(100,10)
+        #self.click(570, 500, duration)
         #拉长时间？不需要，
         #parse_reward(name)
+        
         self.click(900, 150, 5)
         self.click(900, 150, 0)
+        return normal_exis
 
+    def check_game_over(self,first_sleep=100,frequent=10):
+        time.sleep(first_sleep)
+        check_num = 0
+        while check_num < 50:
+            check_num += 1
+            result = self.check('utils/config/pic/base/stageover.png')
+            if result['conf'] > 0.9:
+                self.click(570, 200, 3)
+                return True
+            else:
+                time.sleep(frequent)
+        return False
+
+            
     def back_to_main(self):
         condi = True
         while condi:

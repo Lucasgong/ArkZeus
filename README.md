@@ -10,15 +10,12 @@ Enjoying your game and life :)
 
 ## how to use
 1. install adb
+2. register Baidu AI account [https://cloud.baidu.com/doc/OCR/s/dk3iqnq51]
+3. set account_info.yaml/baidu_API.py using account_info_exp.yaml/baidu_API_exp.py as template
 
-## how to add new stage
-修改setting utils/config/setting.py
-增加新关卡：
-    1. 增加图片 utils/config/pic/stage_pic
-    2. 到达关卡方式 utils/config/stage.py
-    3. 关卡完成时间 utils/config/stage.py
 
-## 
-1. 关卡结束判断
-2. 增加滚动到边缘判定
-3. 滚动翻页的 robust 实现
+## 20210210
+1. 关卡结束时间的自动判断
+2. 利用百度识图API实现自动定位关卡
+
+

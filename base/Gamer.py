@@ -14,7 +14,7 @@ import platform
 import time
 from pathlib import Path
 
-from cv2 import cv2
+import cv2
 from tqdm import tqdm
 
 
@@ -58,8 +58,8 @@ class PhoneGamer(Gamer):
     param : 
     return {type} 
     '''
-    def __init__(self, kind):
-        super().__init__(kind, "192.168.1.105:5555")
+    def __init__(self, kind,device_name="192.168.1.105:5555"):
+        super().__init__(kind, device_name)
         self.get_resolution()
 
     def rotation_to_row(self):

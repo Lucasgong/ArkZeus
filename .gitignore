@@ -1,4 +1,6 @@
 config/account_info.yaml
+config/baidu_API.py
+config/token.txt
 .vscode
 *__py*
 data/*
