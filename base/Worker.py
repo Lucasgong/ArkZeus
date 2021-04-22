@@ -2,7 +2,7 @@
 Description: define useful worker
 Author: zgong
 Date: 2020-10-01 16:07:47
-LastEditTime: 2021-01-30 13:06:52
+LastEditTime: 2021-04-16 17:46:54
 LastEditors: zgong
 FilePath: /ArkZeus/base/Worker.py
 Reference: 
@@ -27,7 +27,7 @@ class Start(PhoneGamer):
         self.device_name = device_name
         self.connect()
         self.rotation_to_row()
-        super().__init__(kind,device_name)
+        super().__init__(kind, device_name)
         if not is_open:
             self.quit()
             self.load(kind)
@@ -106,6 +106,7 @@ class Material(PhoneGamer):
 
     def run(self):
         print(f'go to {self.planer.name}:{self.planer.num}times')
+        print(self.planer.stagetype)
         self.screenshot(name='state_old')
         self.stageselector.run()
         #duration = self.stageinfo.duration
@@ -125,7 +126,7 @@ class Material(PhoneGamer):
         stagetype = self.planer.stagetype
         use_potion = self.planer.is_potion
         use_stone = self.planer.is_stone
-        
+
         self.click(900, 600, 5)
         if use_potion:
             self.click(870, 500, 3)
@@ -135,32 +136,40 @@ class Material(PhoneGamer):
         self.click(900, 600, 5)
         self.click(900, 400, 3)
         ## TODO:心跳机制判断是否结束
-        if stagetype == "ANNI":
-            normal_exis = self.check_game_over(1000,100)
-        else:
-            normal_exis = self.check_game_over(100,10)
+        normal_exis = self.check_game_over(kind=stagetype)
         #self.click(570, 500, duration)
         #拉长时间？不需要，
         #parse_reward(name)
-        
+
         self.click(900, 150, 5)
         self.click(900, 150, 0)
         return normal_exis
 
-    def check_game_over(self,first_sleep=100,frequent=10):
+    def check_game_over(self, kind="stage"):
+        if kind == 'ANNI':
+            first_sleep = 1000
+            frequent = 100
+            pic_path = 'utils/config/pic/base/stageovervague.png'
+        else:
+            first_sleep = 100
+            frequent = 10
+            pic_path = 'utils/config/pic/base/stageover.png'
+  
         time.sleep(first_sleep)
         check_num = 0
         while check_num < 50:
             check_num += 1
-            result = self.check('utils/config/pic/base/stageover.png')
+            result = self.check(pic_path)
             if result['conf'] > 0.9:
+                #now = datetime.datetime.now().strftime('%m%d-%H%M%S')
+                #self.screenshot(name=now)
                 self.click(570, 200, 3)
                 return True
             else:
                 time.sleep(frequent)
+        self.screenshot(name='failure')
         return False
 
-            
     def back_to_main(self):
         condi = True
         while condi:

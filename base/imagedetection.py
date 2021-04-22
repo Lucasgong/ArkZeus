@@ -28,8 +28,8 @@ ssl._create_default_https_context = ssl._create_unverified_context
 from config.baidu_API import API_KEY,SECRET_KEY
 
 
-#OCR_URL = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic"
-OCR_URL =  "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate"
+OCR_URL = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate"
+#OCR_URL =  "https://aip.baidubce.com/rest/2.0/ocr/v1/general"
 
 """  TOKEN start """
 TOKEN_URL = 'https://aip.baidubce.com/oauth/2.0/token'
@@ -88,7 +88,7 @@ def request(url, data):
     req = Request(url, data.encode('utf-8'))
     has_error = False
     try:
-        f = urlopen(req)
+        f = urlopen(req,timeout=10)
         result_str = f.read()
         if (IS_PY3):
             result_str = result_str.decode()
@@ -106,7 +106,7 @@ def detection_image(name,pic='data/screen.png'):
         with open(token_path,'w') as handler:
             handler.write(token)
     image_url = OCR_URL + "?access_token=" + token
-    file_content = read_file('data/screen.png')
+    file_content = read_file(pic)
 
     # 调用文字识别服务
     result = request(image_url, urlencode({'image': base64.b64encode(file_content)}))
@@ -118,8 +118,19 @@ def detection_image(name,pic='data/screen.png'):
     
     # 解析返回结果
     result_json = json.loads(result)
+    if 'error_code' in result_json:
+        if result_json["error_msg"] == 'Access token expired':
+            token = fetch_token()
+            with open(token_path,'w') as handler:
+                    handler.write(token)
+            print('refresh token')
+            detected,center_x,center_y = detection_image(name,pic)
+            return detected,center_x,center_y
+        else:
+            raise Exception(f'{result_json["error_msg"]}')
+
     for words in result_json['words_result']:
-        if words['words'].strip() == name:
+        if name in words['words'].strip() :
             center_x = int(words['location']['left']+0.5*words['location']['width'])
             center_y = int(words['location']['top']+0.5*words['location']['height'])
             detected = True
@@ -134,7 +145,7 @@ if __name__ == '__main__':
     # 拼接通用文字识别高精度url
     image_url = OCR_URL + "?access_token=" + token
 
-    text = ""
+    text = "行动记录"
 
     # 读取书籍页面图片
     file_content = read_file('data/screen.png')

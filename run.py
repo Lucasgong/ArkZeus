@@ -2,7 +2,7 @@
 Description: 
 Author: zgong
 Date: 2020-08-19 10:27:06
-LastEditTime: 2020-10-27 19:31:37
+LastEditTime: 2021-04-16 11:37:22
 LastEditors: zgong
 FilePath: /ArkZeus/run.py
 Reference: 
@@ -14,7 +14,7 @@ from base.Worker import Start, Material
 from base.Tasker import Tasker
 from etc.update_item import update
 
-DEVICE="192.168.50.70:5555"
+DEVICE="192.168.1.101:5555"
 
 def main():
     #update()

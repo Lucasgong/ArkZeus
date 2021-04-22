@@ -5,7 +5,6 @@ import re
 
 from .Gamer import PhoneGamer
 from utils.config.setting import Calendar_Supply
-from .imagedetection import detection_image
 
 
 class StageSelector(PhoneGamer):
@@ -14,21 +13,6 @@ class StageSelector(PhoneGamer):
         self.name = name
         self.day = day
         self.stagetype = stagetype
-    
-    def click_stage(self,name):
-        n = 0
-        while(n<10):
-            print(f'scan {n}')
-            self.screenshot()
-            detected,center_x,center_y = detection_image(name)
-            if detected:
-                self.click(center_x,center_y,3)
-                break
-            else:
-                self.swipe_page(0.5)
-                n+=1
-        if n == 10:
-            raise(f"can not detect stage {name}")
 
     def route(self):
         # {'ACTIVITY', 'DAILY', 'MAIN', 'SUB'}
@@ -63,17 +47,18 @@ class StageSelector(PhoneGamer):
         if activity == 'DM':
             self.click(*up_down[loc])
             self.click(750, 450, 3)
-        
+            return
+
         if activity == 'SV':
             self.click(*up_down[loc])
             self.click(150, 450, 3)
-        
+            return
         if activity == 'TW':
             self.click(*up_down[loc])
             self.click(920, 300, 3)
             self.go_to_right()
             self.swipe_page(0.5)
-
+            return
         if activity == 'OF':
             self.click(*up_down[loc])
             if name[3] == 'F':
@@ -82,40 +67,54 @@ class StageSelector(PhoneGamer):
                 self.click(880, 300, 3)
                 self.go_to_right()
                 self.swipe_page(2)
-
+            return
         if activity == 'RI':
             self.click(*up_down[1])
             self.click(930, 300, 3)
             self.go_to_right()
             self.swipe_page(2)
-        
+            return
         if activity == 'GT':
             self.click(650, 200, 3)
             self.click(680, 600, 3)
             self.click(800, 355, 3)
-
+            return
         if activity == 'MN':
             self.click(*up_down[loc])
             self.click(2000 / self.x_ratio, 830 / self.y_ratio, 3)
             self.go_to_right(2)
             self.swipe_page(1.5)
-
+            return
         if activity == 'MB':
             self.click(*up_down[loc])
             self.click(2240 / self.x_ratio, 350 / self.y_ratio, 3)
-
+            return
         if activity == 'BH':
             self.click(*up_down[loc])
             self.click(880, 500, 3)
-
+            return
         if activity == 'WR':
             self.click(*up_down[loc])
             self.click(920, 550, 3)
             self.go_to_right(2)
             self.swipe_page(1)
-
+            return
+        if activity == 'OD':
+            self.click(*up_down[1])
+            time.sleep(10)
+            self.click_detected_text('行动记录')
+            self.go_to_right(2)
+            self.swipe_page(2)
+            return
+        if activity == 'WD':
+            self.click(*up_down[1])
+            time.sleep(10)
+            self.click_detected_text('独行')
+            self.go_to_right(2)
+            self.swipe_page(1)
+            return
         else:
-            raise (f'place set entrance of {activity}!')
+            raise Exception(f'place set entrance of {activity}!')
 
     def route_main(self, name, day):
         self.click(650, 200, 3)
@@ -137,18 +136,24 @@ class StageSelector(PhoneGamer):
 
     def route_annihilation(self, name, day):
         self.click(650, 200, 3)
-        self.click(430, 600, 3)
-        self.go_to_right(1)
-        self.click(970, 570, 3)
-        self.click(500, 300, 3)
-        if name == 'shiqu':
-            self.click(800, 300, 3)
-        elif name == 'waihuan':
-            self.click(600, 400, 3)
-        elif name == 'qishi':
-            self.click(500, 250, 3)
-        elif name == 'feixu':
-            self.click(200, 350, 3)
+        if name == 'jiaomie':
+            self.click_detected_text('合成玉')
+            
+        # self.click(430, 600, 3)
+        # self.go_to_right(1)
+        # self.click(970, 570, 3)
+        # self.click(500, 300, 3)
+            
+        # if name == 'shiqu':
+        #     self.click(800, 300, 3)
+        # elif name == 'waihuan':
+        #     self.click(600, 400, 3)
+        # elif name == 'qishi':
+        #     self.click(500, 250, 3)
+        # elif name == 'feixu':
+        #     self.click_detected_text('北原冰封废城')
+        # elif name == 'kuangqu':
+        #     self.click_detected_text('废弃矿区')
 
     def route_daily(self, name, day):
         self.click(650, 200, 3)
@@ -159,7 +164,7 @@ class StageSelector(PhoneGamer):
             l = 780 - 100 * (5 - level)
             h = 180 + 90 * (5 - level)
             self.click(l, h)
-        
+
         else:
             chiptype = self.which_chip(name)
             if chiptype:
@@ -200,12 +205,11 @@ class StageSelector(PhoneGamer):
     def is_chip(self, name):
         na = name[:2]
         return na in ['PR']
-    
-    def which_chip(self,name):
-        chip_dic = {'A':'固若金汤','B':'摧枯拉朽','C':'势不可挡','D':'身先士卒'}
-        if is_chip(name):
+
+    def which_chip(self, name):
+        chip_dic = {'A': '固若金汤', 'B': '摧枯拉朽', 'C': '势不可挡', 'D': '身先士卒'}
+        if self.is_chip(name):
             chip_type = chip_dic[name[3]]
             return chip_type
         else:
             return False
-            

@@ -2,7 +2,7 @@
 Description: 
 Author: zgong
 Date: 2020-09-25 01:33:50
-LastEditTime: 2020-10-15 23:17:32
+LastEditTime: 2021-03-09 23:49:11
 LastEditors: zgong
 FilePath: /ArkZeus/debug.py
 Reference: 
@@ -14,9 +14,9 @@ from base.TaskServer import Server
 from base.Worker import Start, Material
 from base.Tasker import Tasker
 
-
+DEVICE="192.168.1.100:5555"
 server = Server()
-o = Start('guan', None, is_open=True,device_name="192.168.50.70:5555")
+o = Start('guan', None, is_open=True,device_name=DEVICE)
 for task in server.send_tasks():
     tasker = Tasker(task)
     if tasker.valid:

@@ -2,7 +2,7 @@
 Description: define basic operator
 Author: zgong
 Date: 2020-05-17 13:16:40
-LastEditTime: 2021-01-18 23:58:35
+LastEditTime: 2021-03-14 08:57:40
 LastEditors: zgong
 FilePath: /ArkZeus/base/Gamer.py
 Reference: 
@@ -16,6 +16,8 @@ from pathlib import Path
 
 import cv2
 from tqdm import tqdm
+
+from .imagedetection import detection_image
 
 
 class Gamer():
@@ -113,17 +115,24 @@ class PhoneGamer(Gamer):
         time.sleep(3)
 
     def screenshot(self, num=0, name='screen'):
+        if num == 5:
+            raise "screenshot error"
+
         screen_file = Path(f'data/{name}_shot.png')
         if not screen_file.exists():
             screen_file.parent.mkdir(parents=True,exist_ok=True)
         os.system(
             f'adb exec-out screencap -p > data/{name}_shot.png')
         img = cv2.imread(f'data/{name}_shot.png')
-        if img.shape[0] > img.shape[1]:
-            img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        img = cv2.resize(img, (1024, 640))
-        cv2.imwrite(f'data/{name}.png', img)
-
+        if img is None:
+            self.screenshot(num+1,name)
+        else:
+            if img.shape[0] > img.shape[1]:
+                img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+            img = cv2.resize(img, (1024, 640))
+            cv2.imwrite(f'data/{name}.png', img)
+        Path(f'data/{name}_shot.png').unlink()
+        
     def check(self, pic_path, screen='screen'):
         # find pic location
         template = cv2.imread(pic_path)
@@ -165,3 +174,28 @@ class PhoneGamer(Gamer):
             return True
         else:
             return False
+    
+    def click_detected_text(self,text):
+        self.screenshot()
+        detected,center_x,center_y = detection_image(text)
+        if detected:
+            print('detected')
+            self.click(center_x,center_y,3)
+            return True
+        else:
+            raise Exception(f'cant find {text}')
+        
+    def click_stage(self,name):
+        n = 0
+        while(n<10):
+            print(f'scan {n}')
+            self.screenshot()
+            detected,center_x,center_y = detection_image(name)
+            if detected:
+                self.click(center_x,center_y,3)
+                break
+            else:
+                self.swipe_page(0.5)
+                n+=1
+        if n == 10:
+            raise Exception(f"can not detect stage {name}")
